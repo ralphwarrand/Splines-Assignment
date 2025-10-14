@@ -12,25 +12,7 @@
 			</inputlayout>
 			<rendertexture />
 			<items>
-				<item name="plane2" type="geometry">
-					<type>Plane</type>
-					<width>1</width>
-					<height>1</height>
-					<depth>1</depth>
-					<roll>3.14159274</roll>
-					<yaw>3.14159274</yaw>
-					<y>1</y>
-					<topology>LineListAdjecent</topology>
-				</item>
-				<item name="plane1" type="geometry">
-					<type>Plane</type>
-					<width>1</width>
-					<height>1</height>
-					<depth>1</depth>
-					<topology>LineListAdjecent</topology>
-				</item>
 				<item name="planeRS" type="renderstate">
-					<wireframe>true</wireframe>
 					<cull>false</cull>
 					<cullfront>true</cullfront>
 					<blend>false</blend>
@@ -62,6 +44,23 @@
 					<depthfrontfail>Keep</depthfrontfail>
 					<depthbackfail>Keep</depthbackfail>
 				</item>
+				<item name="plane2" type="geometry">
+					<type>Plane</type>
+					<width>1</width>
+					<height>1</height>
+					<depth>1</depth>
+					<roll>3.14159274</roll>
+					<yaw>3.14159274</yaw>
+					<y>1</y>
+					<topology>LineListAdjecent</topology>
+				</item>
+				<item name="plane1" type="geometry">
+					<type>Plane</type>
+					<width>1</width>
+					<height>1</height>
+					<depth>1</depth>
+					<topology>LineListAdjecent</topology>
+				</item>
 			</items>
 			<itemvalues />
 			<variables>
@@ -70,7 +69,7 @@
 				<variable type="float4x4" name="matP" system="Projection" />
 				<variable type="bool" name="moebius">
 					<row>
-						<value>false</value>
+						<value>true</value>
 					</row>
 				</variable>
 			</variables>
@@ -111,15 +110,14 @@
 	<objects />
 	<cameras />
 	<settings>
-		<entry type="property" name="cube" item="pipe" />
 		<entry type="file" name="Simple" shader="vs" />
 		<entry type="file" name="Simple" shader="ps" />
 		<entry type="file" name="Simple" shader="gs" />
 		<entry type="pinned" name="moebius" owner="Simple" />
 		<entry type="camera" fp="false">
-			<distance>4</distance>
-			<pitch>-5</pitch>
-			<yaw>175</yaw>
+			<distance>5</distance>
+			<pitch>37</pitch>
+			<yaw>355</yaw>
 			<roll>360</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />
