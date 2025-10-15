@@ -12,26 +12,50 @@ layout (location = 1) in vec3 normal;
 varying vec4 color;	
  
 mat4 S(in vec3 s) {
-	return mat4(0);
+	// Standard homogeneous scaling matrix
+	return mat4(
+	vec4(s.x, 0, 0, 0),
+	vec4(0, s.y, 0, 0),
+	vec4(0, 0, s.z, 0),
+	vec4(0, 0, 0, 1)
+	);
 }
 
 mat4 T(in vec3 t) {
-	return mat4(0);   	
+	// Standard homogeneous translation matrix
+	return mat4(
+	vec4(1, 0, 0, t.x),
+	vec4(0, 1, 0, t.y),
+	vec4(0, 0, 1, t.z),
+	vec4(0, 0, 0, 1)
+	);   	
 }
 
 mat4 Ry(in float theta) {
-        return mat4(0);
+	// Rotation of theta degress about the Y-axis
+    float c = cos(theta);
+    float s = sin(theta);
+	return mat4(
+        vec4(c, 0.0, s, 0.0),
+        vec4(0.0, 1.0, 0.0, 0.0),
+        vec4(-s, 0.0, c, 0.0),
+        vec4(0.0, 0.0, 0.0, 1.0)
+    );
 }
 
 mat4 B = mat4(0);
 
-
+// It is unclear whether we need to modify the given function template to use
+// the control points directly, or just filling G0 and G1 is sufficient. We
+// have opted to choose the latter option, since it results in cleaner code
 vec4 evalBezier(in float t, in mat4 G) {
-        return vec4(0);
+    vec4 T = vec4(pow(t, 3), pow(t, 2), t, 1.0);
+    return G * B * T;
 }
 
 vec4 evalBezierTan(in float t, in mat4 G) {
-        return vec4(0);
+    vec4 derivT = vec4(3.0 * t * t, 2.0 * t, 1.0, 0.0);	// We take the derivative of cubic bezier function (power rule)
+    return G * B * derivT;
 }
  
 void main(void) {
@@ -69,7 +93,7 @@ void main(void) {
 	// Todo: Finally, position and scale the original [-1/2,1/2]x[-1/2,1/2]x[-1/2,1/2] cube
 	//       to fit precisely on the track in the local coordinate system
 	//       establised by Orient and Twist.
-	mat4 MM = mat4(0.0);	// initially replace by 1.0 to start seeing the cube
+	mat4 MM = mat4(1.0);	// initially replace by 1.0 to start seeing the cube
 	gl_Position = (matVP * matM * MM) * vec4(vertex, 1);
 	
 	color = vec4(abs(normal), 1);		

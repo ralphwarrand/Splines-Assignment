@@ -110,14 +110,13 @@
 	<objects />
 	<cameras />
 	<settings>
-		<entry type="file" name="Simple" shader="vs" />
-		<entry type="file" name="Simple" shader="ps" />
+		<entry type="file" name="Anim" shader="vs" />
 		<entry type="file" name="Simple" shader="gs" />
 		<entry type="pinned" name="moebius" owner="Simple" />
 		<entry type="camera" fp="false">
 			<distance>4</distance>
-			<pitch>-16</pitch>
-			<yaw>357</yaw>
+			<pitch>3</pitch>
+			<yaw>6</yaw>
 			<roll>360</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />
