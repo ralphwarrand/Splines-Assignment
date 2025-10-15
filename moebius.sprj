@@ -69,7 +69,7 @@
 				<variable type="float4x4" name="matP" system="Projection" />
 				<variable type="bool" name="moebius">
 					<row>
-						<value>true</value>
+						<value>false</value>
 					</row>
 				</variable>
 			</variables>
@@ -115,9 +115,9 @@
 		<entry type="file" name="Simple" shader="gs" />
 		<entry type="pinned" name="moebius" owner="Simple" />
 		<entry type="camera" fp="false">
-			<distance>5</distance>
-			<pitch>37</pitch>
-			<yaw>355</yaw>
+			<distance>4</distance>
+			<pitch>-16</pitch>
+			<yaw>357</yaw>
 			<roll>360</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />

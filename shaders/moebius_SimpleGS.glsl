@@ -71,18 +71,17 @@ mat4 computeOrient(in float t, in mat4 G) {
 	// Calculate the origin and axes for the local coordinate system
     vec4 p = evalBezier(t, G); // Position (origin)
     vec4 y_axis = normalize(evalBezierTan(t, G));	// Tangent (Y-axis)
-    vec4 z_axis = vec4(0, 0, 1, 0);	// World Up (temporary Z-axis)
-    vec4 x_axis = normalize(vec4(cross(y_axis.xyz, z_axis.xyz), 0.0)); // Perpendicular (X-axis)
-    
-    // Re-calculate Z-axis to make sure it is orthogonal to the other axes
-    z_axis = normalize(vec4(cross(x_axis.xyz, y_axis.xyz), 0.0));
+    vec4 z_axis = vec4(0, 0, 1, 0);	// World Up (Z-axis)
+    // Perpendicular (X-axis).We don't have to normalize it since the cross product of two orthonormal vectors is normal
+    vec4 x_axis = vec4(cross(y_axis.xyz, z_axis.xyz), 0.0); 
     
     // Construct the local-to-world transformation matrix
     mat4 orient = mat4(x_axis, y_axis, z_axis, p);
 
 	// Apply the twist if set
     if (moebius) {
-        mat4 Twist = Ry(t * radians(180.f)); // twisting by PI * t, so the strip does a full rotation
+    	// twisting around Y by PI * t, so the strip does a full rotation when it connects back to itself
+        mat4 Twist = Ry(t * radians(180.f));
         orient = orient * Twist;
     }
     return orient;
@@ -107,6 +106,7 @@ void main( )
 
     // Generate top triangle strip
     for (int i = 0; i <= uNum; ++i) {
+    	// Map the 16 integers to [0,1]. We're converting i to a float to prevent truncation
         float t = float(i) / uNum;
         mat4 orient = computeOrient(t, G);
         
