@@ -80,8 +80,8 @@ mat4 computeOrient(in float t, in mat4 G) {
 
 	// Apply the twist if set
     if (moebius) {
-    	// twisting around Y by PI * t, so the strip does a full rotation when it connects back to itself
-        mat4 Twist = Ry(t * radians(180.f));
+    	// twisting around Y by PI/2 * t, so the strip does a half rotation when it connects back to itself
+        mat4 Twist = Ry(t * radians(90.f));
         orient = orient * Twist;
     }
     return orient;

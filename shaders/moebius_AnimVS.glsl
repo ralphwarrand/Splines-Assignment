@@ -22,13 +22,12 @@ mat4 S(in vec3 s) {
 }
 
 mat4 T(in vec3 t) {
-	// Standard homogeneous translation matrix
-	return mat4(
-	vec4(1, 0, 0, t.x),
-	vec4(0, 1, 0, t.y),
-	vec4(0, 0, 1, t.z),
-	vec4(0, 0, 0, 1)
-	);   	
+    return mat4(
+        vec4(1.0, 0.0, 0.0, 0.0),
+        vec4(0.0, 1.0, 0.0, 0.0),
+        vec4(0.0, 0.0, 1.0, 0.0),
+        vec4(t.x, t.y, t.z, 1.0)
+    );
 }
 
 mat4 Ry(in float theta) {
@@ -43,7 +42,12 @@ mat4 Ry(in float theta) {
     );
 }
 
-mat4 B = mat4(0);
+const mat4 B = mat4(
+    vec4(-1,  3, -3, 1),
+    vec4( 3, -6,  3, 0),
+    vec4(-3,  3,  0, 0),
+    vec4( 1,  0,  0, 0)
+);
 
 // It is unclear whether we need to modify the given function template to use
 // the control points directly, or just filling G0 and G1 is sufficient. We
@@ -72,28 +76,56 @@ void main(void) {
 	const float H = 0.025;   // half of the height of a band
 	const float D = 0.1;    // half of the width of a band	
 	
-	// A convenient constant
-	const vec4 ez = vec4(0,0,1,0);
 	
 	// ToDo: fill Geometry "vectors" with control points
-    mat4 G0 = mat4(0);  // 1st Bezier
-    mat4 G1 = mat4(0);  // 2nd Bezier
+    mat4 G0 = mat4(P0, P1, P2, P3);  // 1st Bezier
+    mat4 G1 = mat4(P3, P4, P5, P0);  // 2nd Bezier
 
     // compute time based on frame count
 	float t = 4*float(frame)/1000;
 	float s = mod(t, 2.0);
 	
+	float loop_s = mod(t, 4.0); // [0, 4] represents full 2-lap 
+	
 	// Choose which Bezier to evaluate based on s
 	// TODO: compute local axis system on the track
-    mat4 Orient = mat4(1.0);
+	mat4 G;   // Active geometry matrix
+    float u;  // parameter [0, 1] for active curve segment
+
+    if (s < 1.0) {
+        G = G0;
+        u = s;
+    } else {
+        G = G1;
+        u = s - 1.0; // u becomes [0, 1] for second segment
+    }
+    
+    // Position on the curve (translation)
+    vec4 p = evalBezier(u, G);
+
+    // Tangent to the curve (local Y)
+    vec4 y_axis = normalize(evalBezierTan(u, G));
+    // World up vector
+    vec4 z_axis = vec4(0.0, 0.0, 1.0, 0.0);             
+    vec4 x_axis = vec4(cross(y_axis.xyz, z_axis.xyz), 0.0); 
+
+    mat4 Orient = mat4(x_axis, y_axis, z_axis, p);
         
     // Todo: For Moebius twist the band
-    mat4 Twist = moebius?mat4(1.0):mat4(1.0);
+    mat4 Twist = moebius ? Ry(s * radians(90.f)) : mat4(1.0);
 	
 	// Todo: Finally, position and scale the original [-1/2,1/2]x[-1/2,1/2]x[-1/2,1/2] cube
 	//       to fit precisely on the track in the local coordinate system
 	//       establised by Orient and Twist.
-	mat4 MM = mat4(1.0);	// initially replace by 1.0 to start seeing the cube
+	
+	mat4 S_cube = S(vec3(2.0 * D, 2.0 * D, 2.0 * D));
+	
+	// We create a translation matrix to lift the cube onto the track, dependent on loop in mobius strip
+	// This oneliner checks if we are on moebius strip, if yes flip sign of offset
+	mat4 T_cube = moebius && (loop_s  >= 2.0) ? T(vec3(0.0, 0.0,  H + D)) : T(vec3(0.0, 0.0,  - (H + D)));
+	
+	mat4 MM = Orient * Twist * T_cube * S_cube;
+	
 	gl_Position = (matVP * matM * MM) * vec4(vertex, 1);
 	
 	color = vec4(abs(normal), 1);		

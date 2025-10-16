@@ -69,7 +69,7 @@
 				<variable type="float4x4" name="matP" system="Projection" />
 				<variable type="bool" name="moebius">
 					<row>
-						<value>false</value>
+						<value>true</value>
 					</row>
 				</variable>
 			</variables>
@@ -110,13 +110,17 @@
 	<objects />
 	<cameras />
 	<settings>
-		<entry type="file" name="Anim" shader="vs" />
+		<entry type="property" name="Anim" item="pipe" />
+		<entry type="file" name="Simple" shader="vs" />
+		<entry type="file" name="Simple" shader="ps" />
 		<entry type="file" name="Simple" shader="gs" />
+		<entry type="file" name="Anim" shader="vs" />
+		<entry type="file" name="Anim" shader="ps" />
 		<entry type="pinned" name="moebius" owner="Simple" />
 		<entry type="camera" fp="false">
-			<distance>4</distance>
-			<pitch>3</pitch>
-			<yaw>6</yaw>
+			<distance>3</distance>
+			<pitch>-70</pitch>
+			<yaw>180</yaw>
 			<roll>360</roll>
 		</entry>
 		<entry type="clearcolor" r="0" g="0" b="0" a="0" />
