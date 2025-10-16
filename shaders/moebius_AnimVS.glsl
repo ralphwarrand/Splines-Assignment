@@ -122,7 +122,7 @@ void main(void) {
 	
 	// We create a translation matrix to lift the cube onto the track, dependent on loop in mobius strip
 	// This oneliner checks if we are on moebius strip, if yes flip sign of offset
-	mat4 T_cube = moebius && (loop_s  >= 2.0) ? T(vec3(0.0, 0.0,  H + D)) : T(vec3(0.0, 0.0,  - (H + D)));
+	mat4 T_cube = moebius && (loop_s  >= 2.0) ? T(vec3(0.0, 0.0,  -(H + D))) : T(vec3(0.0, 0.0,  H + D));
 	
 	mat4 MM = Orient * Twist * T_cube * S_cube;
 	
